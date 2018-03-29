@@ -10,6 +10,6 @@ COPY . .
 
 RUN yarn build
 
-EXPOSE 80
+EXPOSE 8088
 
 CMD [ "yarn", "start" ]

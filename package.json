@@ -1,0 +1,18 @@
+{
+  "name": "lds-scriptures-graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mormon-documentation-project/lds-scriptures-graphql.git",
+  "author": "Lance Miller <dev@lance.pub>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "better-sqlite3": "^4.1.0",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2",
+    "lds-scriptures": "mormon-documentation-project/lds-scriptures#sqlite3"
+  }
+}
