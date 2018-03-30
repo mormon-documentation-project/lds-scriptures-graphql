@@ -9,10 +9,10 @@
     "start": "node ."
   },
   "dependencies": {
-    "better-sqlite3": "^4.1.0",
-    "express": "^4.16.3",
-    "express-graphql": "^0.6.12",
-    "graphql": "^0.13.2",
-    "lds-scriptures": "mormon-documentation-project/lds-scriptures#sqlite3"
+    "graphql-yoga": "^1.7.0",
+    "join-monster": "^2.0.16",
+    "knex": "^0.14.4",
+    "lds-scriptures": "mormon-documentation-project/lds-scriptures#sqlite3",
+    "sqlite3": "^4.0.0"
   }
 }
