@@ -1,11 +1,9 @@
 const {
 	GraphQLObjectType,
 	GraphQLInt,
-	GraphQLString,
 	GraphQLList,
 	GraphQLSchema,
 	GraphQLNonNull,
-    GraphQLEnumType,
 } = require('graphql');
 const {scriptures, strongs} = require('./db');
 const {
@@ -14,43 +12,9 @@ const {
 	Chapter,
 	Verse,
 	Strongs,
+	StrongsLang,
+	StrongsId,
 } = require('./types');
-
-const StrongsLang = new GraphQLEnumType({
-	name: 'StrongsLang',
-	values: {
-		H: { value: 'H'},
-		HEB: { value: 'H' },
-		HEBREW: { value: 'H' },
-		G: { value: 'G' },
-		GR: { value: 'G' },
-		GREEK: { value: 'G' },
-	},
-});
-const strongsArgs = {
-    id: {
-        type: GraphQLString,
-            description: '',
-    },
-    lang: {
-        type: StrongsLang,
-            description: '',
-    },
-};
-
-function strongsWhere(table, {id, lang}) {
-    lang = lang && lang[0].toUpperCase();
-
-    if (id && lang && !isNaN(id)) {
-        id = `${lang}${id}`;
-    } else if (lang && !id) {
-        return `${table}.number LIKE '${lang}%'`;
-    } else if (!lang && !id) {
-        throw new Error('id and/or lang required');
-    }
-
-    return `${table}.number = '${id}'`;
-};
 
 module.exports = new GraphQLSchema({
 	description: '',
@@ -152,7 +116,7 @@ module.exports = new GraphQLSchema({
 				description: '',
 				args: {
                     id: {
-                        type: GraphQLString,
+                        type: StrongsId,
                         description: '',
                     },
 					lang: {

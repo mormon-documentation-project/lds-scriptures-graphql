@@ -3,6 +3,7 @@ const {
 	GraphQLInt,
 	GraphQLList,
 	GraphQLString,
+    GraphQLEnumType,
 } = require('graphql');
 
 const Volume = new GraphQLObjectType({
@@ -226,10 +227,34 @@ const Strongs = new GraphQLObjectType({
 	}),
 });
 
+const StrongsLang = new GraphQLEnumType({
+    name: 'StrongsLang',
+    values: {
+        H: { value: 'H'},
+        HEB: { value: 'H' },
+        HEBREW: { value: 'H' },
+        G: { value: 'G' },
+        GR: { value: 'G' },
+        GREEK: { value: 'G' },
+    },
+});
+
+const StrongsId = new GraphQLEnumType({
+	name: 'StrongsId',
+	values: [['H', 8674],['G',5624]]
+		.reduce((values, [lang,length]) => [
+			...values,
+			...Array.from({length}, (x, i) => `${lang}${i+1}`),
+		], [])
+		.reduce((ids, id) => Object.assign(ids, {[id]: { value: id }}), {}),
+});
+
 module.exports = {
 	Volume,
 	Book,
 	Chapter,
 	Verse,
 	Strongs,
+	StrongsLang,
+	StrongsId,
 };
