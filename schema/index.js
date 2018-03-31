@@ -1,17 +1,56 @@
 const {
 	GraphQLObjectType,
 	GraphQLInt,
+	GraphQLString,
 	GraphQLList,
 	GraphQLSchema,
 	GraphQLNonNull,
+    GraphQLEnumType,
 } = require('graphql');
-const resolve = require('./db');
+const {scriptures, strongs} = require('./db');
 const {
 	Volume,
 	Book,
 	Chapter,
 	Verse,
+	Strongs,
 } = require('./types');
+
+const StrongsLang = new GraphQLEnumType({
+	name: 'StrongsLang',
+	values: {
+		H: { value: 'H'},
+		HEB: { value: 'H' },
+		HEBREW: { value: 'H' },
+		G: { value: 'G' },
+		GR: { value: 'G' },
+		GREEK: { value: 'G' },
+	},
+});
+const strongsArgs = {
+    id: {
+        type: GraphQLString,
+            description: '',
+    },
+    lang: {
+        type: StrongsLang,
+            description: '',
+    },
+};
+
+function strongsWhere(table, {id, lang}) {
+    lang = lang && lang[0].toUpperCase();
+
+    if (id && lang && !isNaN(id)) {
+        id = `${lang}${id}`;
+    } else if (lang && !id) {
+        return `${table}.number LIKE '${lang}%'`;
+    } else if (!lang && !id) {
+        throw new Error('id and/or lang required');
+    }
+
+    return `${table}.number = '${id}'`;
+};
 
 module.exports = new GraphQLSchema({
 	description: '',
@@ -22,7 +61,7 @@ module.exports = new GraphQLSchema({
 			volumes: {
 				type: new GraphQLList(Volume),
 				description: '',
-				resolve,
+				resolve: scriptures,
 			},
 			volume: {
 				type: Volume,
@@ -34,7 +73,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {id}) => `${table}.id = ${id}`,
-				resolve,
+				resolve: scriptures,
 			},
 			books: {
 				type: new GraphQLList(Book),
@@ -46,7 +85,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {volumeId}) => typeof volumeId !== 'undefined' ? `${table}.volume_id = ${volumeId}` : false,
-				resolve,
+				resolve: scriptures,
 			},
 			book: {
 				type: Book,
@@ -58,7 +97,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {id}) => `${table}.id = ${id}`,
-				resolve,
+				resolve: scriptures,
 			},
 			chapters: {
 				type: new GraphQLList(Chapter),
@@ -70,7 +109,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {bookId}) => typeof bookId !== 'undefined' ? `${table}.book_id = ${bookId}` : false,
-				resolve,
+				resolve: scriptures,
 			},
 			chapter: {
 				type: Chapter,
@@ -82,7 +121,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {id}) => `${table}.id = ${id}`,
-				resolve,
+				resolve: scriptures,
 			},
 			verses: {
 				type: new GraphQLList(Verse),
@@ -94,7 +133,7 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {chapterId}) => typeof chapterId !== 'undefined' ? `${table}.chapter_id = ${chapterId}` : false,
-				resolve,
+				resolve: scriptures,
 			},
 			verse: {
 				type: Verse,
@@ -106,7 +145,47 @@ module.exports = new GraphQLSchema({
 					},
 				},
 				where: (table, {id}) => `${table}.verse_id = ${id}`,
-				resolve,
+				resolve: scriptures,
+			},
+			strongsEntry: {
+				type: Strongs,
+				description: '',
+				args: {
+                    id: {
+                        type: GraphQLString,
+                        description: '',
+                    },
+					lang: {
+						type: StrongsLang,
+						description: '',
+					},
+					number: {
+						type: GraphQLInt,
+						description: '',
+					},
+				},
+				where: (table, {lang, number, id}) => {
+                    if (!id && (lang && number)) {
+                    	id = `${lang}${number}`;
+					} else if (!id) {
+                        throw new Error('lang and number are both required if no id is given');
+					}
+
+					return `${table}.number = '${id}'`;
+				},
+				resolve: strongs,
+			},
+			strongsEntries: {
+				type: new GraphQLList(Strongs),
+				description: '',
+				args: {
+					lang: {
+						type: new GraphQLNonNull(StrongsLang),
+						description: '',
+					},
+				},
+				where: (table, {lang}) => `${table}.number LIKE '${lang}%'` ,
+				resolve: strongs,
 			},
 		}),
 	}),

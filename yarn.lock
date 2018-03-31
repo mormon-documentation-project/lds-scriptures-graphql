@@ -1850,6 +1850,10 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
+strongs@mormon-documentation-project/strongs#sqlite3:
+  version "0.0.0"
+  resolved "https://codeload.github.com/mormon-documentation-project/strongs/tar.gz/cd21e87a34b8e8b4ae460cc96c19d84231244251"
+
 subscriptions-transport-ws@^0.9.6:
   version "0.9.7"
   resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.9.7.tgz#9be456d6e188c96a53c91f570850e59bee5840ac"

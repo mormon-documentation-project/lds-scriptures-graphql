@@ -13,6 +13,7 @@
     "join-monster": "^2.0.16",
     "knex": "^0.14.4",
     "lds-scriptures": "mormon-documentation-project/lds-scriptures#sqlite3",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^4.0.0",
+    "strongs": "mormon-documentation-project/strongs#sqlite3"
   }
 }

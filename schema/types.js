@@ -174,9 +174,62 @@ const Verse = new GraphQLObjectType({
 	}),
 });
 
+const Strongs = new GraphQLObjectType({
+	name: 'Strongs',
+	description: '',
+	sqlTable: 'strongs',
+	uniqueKey: 'number',
+	fields: () => ({
+		id: {
+			type: GraphQLString,
+			description: '',
+			sqlColumn: 'number',
+		},
+		lang: {
+			type: GraphQLString,
+			description: '',
+            sqlDeps: ['number'],
+			resolve({number}) {
+				switch (number[0]) {
+					case 'G':
+						return 'Greek';
+						break;
+					case 'H':
+						return 'Hebrew';
+						break;
+					default:
+						return 'unknown';
+						break;
+				}
+            }
+		},
+		entry: {
+			type: GraphQLString,
+			description: '',
+			sqlColumn: 'lemma',
+		},
+		transliteration: {
+			type: GraphQLString,
+			description: '',
+			sqlColumn: 'xlit',
+		},
+		pronunciation: {
+			type: GraphQLString,
+			description: '',
+			sqlColumn: 'pronounce',
+		},
+		definition: {
+			type: GraphQLString,
+			description: '',
+			sqlColumn: 'description',
+		},
+	}),
+});
+
 module.exports = {
 	Volume,
 	Book,
 	Chapter,
 	Verse,
+	Strongs,
 };
